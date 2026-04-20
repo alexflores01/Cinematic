@@ -92,9 +92,9 @@ class TextScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('topPetals', 'assets/RedPetalsFallingTop.png');
-        this.load.image('leftPetals', 'assets/RedPetalsFallingLeft.png');
-        this.load.image('rightPetals', 'assets/RedPetalsFallingRight.png');
+        this.load.image('topPetals', 'assets/redpetalsfallingtop.png');
+        this.load.image('leftPetals', 'assets/redpetalsfallingleft.png');
+        this.load.image('rightPetals', 'assets/redpetalsfallingright.png');
 
     }
 
