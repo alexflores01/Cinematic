@@ -8,7 +8,7 @@ class Start extends Phaser.Scene{
     }
 
     create(){
-        this.add.text(360, 300, "CLICK TO BEGIN...",{
+        this.add.text(340, 300, "CLICK TO BEGIN...",{
             fontFamily: 'Amatic SC',
             fontSize: '24px',
             color: '#ffffff',
@@ -80,6 +80,10 @@ class IntroScene extends Phaser.Scene {
                 });
             }
         });
+
+        this.input.on('pointerdown', () => {
+            this.scene.start('textscene');
+        })
     }
 
     update() {
@@ -157,13 +161,75 @@ THERE IS A STARVING WIDOW...`, {
             delay: 7000,
         });
         //red fade out
-        this.time.delayedCall(8000, () => {
-            this.cameras.main.fadeOut(2000, 255, 0, 0) 
+        this.time.delayedCall(11000, () => {
+            this.cameras.main.fadeOut(2000, 255, 0, 0)
+        });
+        
+        this.time.delayedCall(13000, () => {
+            this.scene.start('menu');
         });
 
-        this.time.delayedCall(10000, () => {
-            this.scene.start('start');
+        this.input.on('pointerdown', () => {
+            this.scene.start('menu');
+        })
+
+    }
+}
+
+class Menu extends Phaser.Scene {
+    constructor () {
+        super('menu');
+    }
+
+    preload(){
+        this.load.image('spiderWeb', 'assets/RealisticSpiderWeb.png');
+        this.load.image('blackWidow', 'assets/BlackWidowSpider.png');
+    }
+
+    create(){
+        
+        this.cameras.main.setBackgroundColor('#012046')
+
+        this.imageWeb = this.add.image(400, 300, 'spiderWeb');
+        this.imageWeb.setScale(0.35);
+        this.imageSpider = this.add.image(520, 350, 'blackWidow');
+        this.imageSpider.setScale(0.1);
+        this.imageSpider.angle = -50;
+        //set the zoom fixed at 175x
+        this.cameras.main.setZoom(175);
+        //point the camera at the red sybmols x, y
+        this.cameras.main.centerOn(560, 380);
+        //zoom out from 175x to 1x in 4 secs, ease
+        this.time.delayedCall(2000, () => {
+            this.cameras.main.zoomTo(1, 4000, 'Power2');
         });
+        //move/pan back camera to center
+        this.time.delayedCall(5000, () => {
+            this.cameras.main.pan(400, 300, 1000, 'Power2');
+        })
+
+        this.textTitle = this.add.text(180, 70, 'Lonely Widow', {
+            fontFamily: 'Amatic SC',
+            fontSize: '120px',
+            fontStyle: 'bold',
+            color: '#CD0404',
+        });
+
+        this.textTitle.setAlpha(1);
+
+        this.textMenu = this.add.text(50, 200, 
+` Start
+
+ Load
+
+ Settings`, {
+            fontFamily: 'Amatic SC',
+            fontSize: '60px',
+            fontStyle: 'bold',
+            color: '#CD0404',
+        });
+        this.textMenu.setAlpha(1);
+
 
     }
 }
@@ -172,6 +238,6 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    scene: [Start, IntroScene, TextScene]
+    scene: [Start, IntroScene, TextScene, Menu]
 };
 const game = new Phaser.Game(config);  
