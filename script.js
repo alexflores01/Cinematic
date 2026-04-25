@@ -5,6 +5,8 @@ class Start extends Phaser.Scene{
 
     preload(){
         this.load.font('Amatic SC', 'assets/AmaticSC-Regular.ttf');
+        this.load.audio('wind', 'audio/dragon-studio-winter-wind-402331.mp3');
+        this.load.audio('dramatic', 'audio/universfield-dramatic-scene-separation-melancholy-15s-159310.mp3');
     }
 
     create(){
@@ -14,7 +16,12 @@ class Start extends Phaser.Scene{
             color: '#ffffff',
         });
 
-        this.input.on('pointerdown', () => this.scene.start('introscene'));
+        this.windSound = this.sound.add('wind');
+
+        this.input.on('pointerdown', () => {
+            this.windSound.play({loop: true});
+            this.scene.start('introscene')
+        });
 
     }
 }
@@ -74,8 +81,15 @@ class IntroScene extends Phaser.Scene {
                 duration: 2500,
                 delay: this.tweens.stagger(800), // Stagger the delay for each petal
                 onComplete: () => {
-                    this.scene.start('textscene');
-
+                    this.tweens.add({
+                        targets: this.sound.get('wind'),
+                        volume: 0,
+                        duration: 2700,
+                        onComplete: () => {
+                            this.sound.stopByKey('wind');
+                            this.scene.start('textscene');
+                        }
+                    });
                 }
                 });
             }
@@ -103,6 +117,9 @@ class TextScene extends Phaser.Scene {
     }
 
     create() {
+        this.dramaticSound = this.sound.add('dramatic');
+        this.dramaticSound.play({loop: true});
+
         this.imageTopPetals = this.add.image(350, 150, 'topPetals');
         this.imageTopPetals.setScale(0.3);
         this.imageTopPetals.setAlpha(0);
@@ -229,6 +246,11 @@ class Menu extends Phaser.Scene {
             color: '#CD0404',
         });
         this.textMenu.setAlpha(1);
+        //this.widowSymbol = this.add.containter(35, 230)
+        //x, y the center of the object, x1, y1, x2, y2, x3, y3 these corners are relative to that center point
+        //let triangle1 = this.add.triangle(35, 210, 0, 0, 50, 0, 25, 40, '0xCD0404');
+        //let triangle2 = this.add.triangle(35, 250, 25, 0, 0, 40, 50, 40, '0xCD0404');
+
 
 
     }
